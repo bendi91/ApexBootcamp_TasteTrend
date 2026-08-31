@@ -1,0 +1,5 @@
+location,restaurant_name,original_city,address,categories,avg_stars,total_reviews
+Downtown,Village Whiskey,Philadelphia,118 S 20th St,"Bars, Nightlife, Whiskey Bars, Burgers, Restaurants, American (New)",4.0,1553
+Midtown,Luke,New Orleans,333 Saint Charles Ave,"German, Restaurants, Seafood, Cocktail Bars, French, Brasseries, American (New), Nightlife, Bars, Cajun/Creole, Breakfast & Brunch",4.0,4554
+Uptown,Tavern,Nashville,1904 Broadway,"Cocktail Bars, Nightlife, Gastropubs, Sports Bars, Restaurants, American (New), Lounges, Bars",4.0,1222
+Eastside,The Bricks,Tampa,1327 E 7th Ave,"Bars, Breakfast & Brunch, Restaurants, American (New), Coffee & Tea, Food, Nightlife, Vegetarian",4.0,548

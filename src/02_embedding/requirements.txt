@@ -1,0 +1,2 @@
+# No external dependencies required.
+# boto3, botocore, and urllib3 are provided natively by the AWS Lambda runtime.

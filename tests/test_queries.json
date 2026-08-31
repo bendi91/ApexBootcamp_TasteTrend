@@ -1,0 +1,39 @@
+[
+  {
+    "id": "Q-01",
+    "category": "ratings",
+    "query": "typical ratings at eastside res?",
+    "expected_keywords": ["rating", "star", "eastside", "review"]
+  },
+  {
+    "id": "Q-02",
+    "category": "sentiment",
+    "query": "how customers feel about the happy hour at midtown?",
+    "expected_keywords": ["midtown", "happy hour", "discount", "service"]
+  },
+  {
+    "id": "Q-03",
+    "category": "comparisons",
+    "query": "which spot is better if i want good vegetarian options, eastside or downtown?",
+    "expected_keywords": ["vegetarian", "veggie", "eastside", "downtown"]
+  },
+  {
+    "id": "Q-04",
+    "category": "trends",
+    "query": "the complaints about long wait times at uptown increased or not?",
+	"expected_keywords": ["busy", "uptown", "long", "wait"]
+  },
+  {
+    "id": "Q-05",
+    "category": "specific_feedback",
+    "query": "the burgers are juicy at downtown?",
+    "expected_keywords": ["burger", "juicy", "downtown", "good"]
+  },
+  {
+	"_comment": "Testing system prompt guardrail: answering quantitative questions is not authorized",
+    "id": "Q-06",
+    "category": "ratings",
+    "query": "show the average rating for eastside res?",
+    "expected_keywords": ["rating", "star", "eastside", "review"]
+  }
+]
