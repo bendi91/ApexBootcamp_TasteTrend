@@ -12,13 +12,13 @@ The TasteTrend PoC deploys lightweight foundation models such as **Cohere Embed 
 
 With the TasteTrend AWS infrastructure fully provisioned and operational, execute the following sequential workflow to simulate client API requests and evaluate pipeline performance:
 
-1. **Input Payload Configuration [Test Queries](tests/test_queries.json):** Prepare a structured JSON file containing test queries and optional metadata parameters to define incoming user requests.  
-2. **Local Script Execution [Validation Script](tests/validate_RAG_pipeline.py):** Run the local Python simulation script to stream test payloads through Amazon API Gateway directly to the live AWS RAG infrastructure.  
-3. **Output Evaluation [RAG Evaluation Results](tests/rag_evaluation_results_20260826_014239.md):** Audit the generated Markdown report to evaluate responses, verify evidence grounding, and inspect retrieved source context returned by the API.
+1. **Input Payload Configuration [Test Queries](../tests/test_queries.json):** Prepare a structured JSON file containing test queries and optional metadata parameters to define incoming user requests.  
+2. **Local Script Execution [Validation Script](../tests/validate_RAG_pipeline.py):** Run the local Python simulation script to stream test payloads through Amazon API Gateway directly to the live AWS RAG infrastructure.  
+3. **Output Evaluation [RAG Evaluation Results](../tests/rag_evaluation_results_20260826_014239.md):** Audit the generated Markdown report to evaluate responses, verify evidence grounding, and inspect retrieved source context returned by the API.
 
 # 2. Input Payload Configuration
 
-To feed test questions into the RAG simulation script, format your queries inside the **[Test Queries](tests/test_queries.json)** file using the JSON schema required by the API Gateway endpoint. 
+To feed test questions into the RAG simulation script, format your queries inside the **[Test Queries](../tests/test_queries.json)** file using the JSON schema required by the API Gateway endpoint. 
 
 Query sample:
 
@@ -71,7 +71,7 @@ pip install requests boto3
 cd Replace this with your directory path
 ```
 
-2. **Run the script:** Execute the [Validation Script](tests/validate_RAG_pipeline.py) simulation script to stream test queries from the JSON file through API Gateway to the live AWS RAG pipeline:
+2. **Run the script:** Execute the [Validation Script](../tests/validate_RAG_pipeline.py) simulation script to stream test queries from the JSON file through API Gateway to the live AWS RAG pipeline:
 
 ```bash
 python tests/validate_RAG_pipeline.py
@@ -131,7 +131,7 @@ Remediation Step: Inspect the latest CloudWatch log stream for the Proxy Lambda 
 
 ## 4.1 Evaluation report
 
-The simulation script exports test execution results into a formatted Markdown evaluation report [RAG Evaluation Results](tests/rag_evaluation_results_20260826_014239.md), which functions as the primary audit record for pipeline validation.
+The simulation script exports test execution results into a formatted Markdown evaluation report [RAG Evaluation Results](../tests/rag_evaluation_results_20260826_014239.md), which functions as the primary audit record for pipeline validation.
 
 Each query entry contains three core components:
 
