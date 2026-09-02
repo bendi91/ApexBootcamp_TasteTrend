@@ -33,7 +33,7 @@
 
 # Architecture overview
 
-![Architecture overview](docs/images/architecture-overview.png)
+![Architecture overview](docs/architecture-overview.png)
 
 # Phase 1: Data Discovery & Analysis
 
@@ -395,6 +395,6 @@ The TasteTrend architecture is engineered to minimize operational expenditure in
 | **Lambda** | 3 lambda functions (ETL, Embedding, Proxy)  | Doesn’t exceed the limit of 1 million requests per month | **$0.00** |
 | **CloudWatch** | 3 log groups with 14-day retention | Stay within the 5 GB free storage | **$0.00** |
 | **OpenSearch** | T3.small.search instance (Single AZ, 1 node) + EBS (gp3, 10GB) | $0.042 per hour → roughly $30.66 per month  + $0.1452 per GB / month | **$30.81** |
-| **Bedrock** | Cohere Embed 3 English + Amazon Nova Micro  | $0.10 per 1M input tokens + $0.046 per 1M input tokens, $0.184 per 1M output tokens | **~ $0.13** |
-| **Amazon API Gateway** | Rest API | $3.70 per million request | **~ $0.04** |
+| **Bedrock** | Cohere Embed 3 English + Amazon Nova Micro  | $0.10 per 1M input tokens + $0.046 per 1M input tokens, $0.184 per 1M output tokens | ~ **$0.13** |
+| **Amazon API Gateway** | Rest API | $3.70 per million request | ~ **$0.04** |
 | **Estimated total monthly cost** | | | ~ **$31.00** |
