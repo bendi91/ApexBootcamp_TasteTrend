@@ -187,13 +187,13 @@ Listing all structural anomalies, data inconsistencies, and quality defects iden
 
 The entire AWS infrastructure is provisioned using Terraform and organized into four modular configuration files:
 
-* [API Gateway terraform config](api_gateway.tf): Provisions a regional REST API Gateway with a public /query POST endpoint, routing incoming HTTP requests directly to the Proxy Lambda function and granting the necessary execution permissions to deploy the interface to a poc stage.
+* [API Gateway terraform config](../api_gateway.tf): Provisions a regional REST API Gateway with a public /query POST endpoint, routing incoming HTTP requests directly to the Proxy Lambda function and granting the necessary execution permissions to deploy the interface to a poc stage.
 
-* [IAM terraform config](iam.tf): Defines IAM roles and fine-grained permission policies that grant each of the three Lambda functions (ETL, Embedding, Proxy) least-privilege access to exactly the services and resources they individually need — including CloudWatch, S3, Amazon Bedrock, KMS encryption, and OpenSearch — with permissions scoped per-function to specific buckets, models, and endpoints rather than granted broadly.
+* [IAM terraform config](../iam.tf): Defines IAM roles and fine-grained permission policies that grant each of the three Lambda functions (ETL, Embedding, Proxy) least-privilege access to exactly the services and resources they individually need — including CloudWatch, S3, Amazon Bedrock, KMS encryption, and OpenSearch — with permissions scoped per-function to specific buckets, models, and endpoints rather than granted broadly.
 
-* [Lambda terraform config](lambda.tf): Packages Python source code into ZIP archives, deploys three AWS Lambda functions (ETL, Embedding and Proxy) with supporting dependencies and CloudWatch logging, and configures S3 event triggers to automatically execute the ETL and embedding pipelines when files are added to the data lake.
+* [Lambda terraform config](../lambda.tf): Packages Python source code into ZIP archives, deploys three AWS Lambda functions (ETL, Embedding and Proxy) with supporting dependencies and CloudWatch logging, and configures S3 event triggers to automatically execute the ETL and embedding pipelines when files are added to the data lake.
 
-* [Main terraform config](main.tf): Provisions the baseline infrastructure for the environment, including provider settings, encrypted S3 buckets for data lake storage and configuration files, a single-node OpenSearch vector database domain and key environment deployment outputs. Encryption at rest is implemented using AWS-managed keys (SSE-KMS), guaranteeing standard compliance and zero-cost setup.
+* [Main terraform config](../main.tf): Provisions the baseline infrastructure for the environment, including provider settings, encrypted S3 buckets for data lake storage and configuration files, a single-node OpenSearch vector database domain and key environment deployment outputs. Encryption at rest is implemented using AWS-managed keys (SSE-KMS), guaranteeing standard compliance and zero-cost setup.
 
 # Phase 3: ETL Pipeline Development
 
