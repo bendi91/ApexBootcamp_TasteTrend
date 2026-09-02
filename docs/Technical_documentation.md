@@ -33,7 +33,7 @@
 
 # Architecture overview
 
-![Architecture overview](docs/architecture-overview.png)
+[Architecture overview](../docs/architecture-overview.png)
 
 # Phase 1: Data Discovery & Analysis
 
@@ -199,11 +199,11 @@ The entire AWS infrastructure is provisioned using Terraform and organized into 
 
 ## 3.1 Mapping config
 
-Schema mapping and rating range normalizations are driven entirely by an external CSV configuration file [Mapping config](config/mapping_config.csv) created during data discovery. By parameterizing header mappings and rating scale divisors (converting 1–10 or 1–100 scales to the standard 1–5 baseline range), the ETL pipeline achieves full dynamic adaptability without requiring code changes or maintaining hardcoded dataset rules. 
+Schema mapping and rating range normalizations are driven entirely by an external CSV configuration file [Mapping config](../config/mapping_config.csv) created during data discovery. By parameterizing header mappings and rating scale divisors (converting 1–10 or 1–100 scales to the standard 1–5 baseline range), the ETL pipeline achieves full dynamic adaptability without requiring code changes or maintaining hardcoded dataset rules. 
 
 ## 3.2 ETL Lambda
 
-The [ETL Lambda](src/01_etl/etl_lambda.py) lambda function acts as an automated ETL pipeline that ingests raw dataset and reference CSV files from an S3 bucket, executes several data transformation steps and writes normalized output files back to a processed path.
+The [ETL Lambda](../src/01_etl/etl_lambda.py) lambda function acts as an automated ETL pipeline that ingests raw dataset and reference CSV files from an S3 bucket, executes several data transformation steps and writes normalized output files back to a processed path.
 
 The sequence of ETL transformation steps directly mirrors  the data inconsistencies listed in the [Data Quality Registry & Standardization Requirements](#1.3-data-quality-registry-&-standardization-requirements).
 
@@ -237,7 +237,7 @@ Validates whether values in the `review_id` column adhere to valid Base64URL enc
 ### Step 6 — Normalize rating values
 **Function:** `normalize_rating`
 
-Scans the `rating_divisor` column in **[Mapping config](config/mapping_config.csv)**; a divisor value greater than 1 triggers scale normalization down to the 1–5 baseline range. Standardizes emoji-only ratings by removing Unicode variation selectors/ZWJ markers and counting remaining visual glyphs. Coerces mixed strings (combining numbers, letters, or emojis) to `NULL` while logging CloudWatch warnings, to surface raw data defects without crashing the pipeline.
+Scans the `rating_divisor` column in **[Mapping config](../config/mapping_config.csv)**; a divisor value greater than 1 triggers scale normalization down to the 1–5 baseline range. Standardizes emoji-only ratings by removing Unicode variation selectors/ZWJ markers and counting remaining visual glyphs. Coerces mixed strings (combining numbers, letters, or emojis) to `NULL` while logging CloudWatch warnings, to surface raw data defects without crashing the pipeline.
 
 ### Step 7 — Missing values in `total_spent`
 **Function:** `derive_missing_total_spent`
@@ -267,9 +267,9 @@ The validation script simplifies debugging by logging the Review IDs of the affe
 
 Related files:
 
-* [ETL Lambda Validation](tests/validate_etl_lambda.py): Validates data accuracy against the standardized CSV output produced by the ETL Lambda function.
+* [ETL Lambda Validation](../tests/validate_etl_lambda.py): Validates data accuracy against the standardized CSV output produced by the ETL Lambda function.
 
-* [ETL Lambda Validation Report](tests/validation_report_20260824_033047.md): Upon completion, the script captures and writes all validation logs directly to a Markdown file for debugging.
+* [ETL Lambda Validation Report](../tests/validation_report_20260824_033047.md): Upon completion, the script captures and writes all validation logs directly to a Markdown file for debugging.
 
 ### 3.3.1 Validation rules
 
@@ -290,7 +290,7 @@ Related files:
 
 # Phase 4: RAG Implementation
 
-The [Embedding Lambda](src/02_embedding/embedding_lambda.py) lambda function processes standardized CSVs stored in S3 and generates vector representations using LLM embeddings, then indexes the resulting metadata into an OpenSearch cluster.
+The [Embedding Lambda](../src/02_embedding/embedding_lambda.py) lambda function processes standardized CSVs stored in S3 and generates vector representations using LLM embeddings, then indexes the resulting metadata into an OpenSearch cluster.
 
 ## 4.1 Implementation details
 
@@ -327,7 +327,7 @@ The AWS Management Console shows **1,242** document count for the **tastetrend-r
 
 # Phase 5: Bedrock Development
 
-This phase implements RAG orchestration as a custom-built Lambda function [Proxy Lambda](src/03_proxy/proxy_lambda.py) rather than provisioning an Amazon Bedrock Agent. This was a deliberate engineering decision because utilizing Bedrock Agents would introduce serious per-invocation costs directly violating our core low-budget architectural strategy. The current lambda implementation provides an optimal balance between low execution complexity and precise retrieval control, offering far greater flexibility over query construction, dynamic filtering and score thresholding than a managed Amazon Bedrock Knowledge Base configuration.
+This phase implements RAG orchestration as a custom-built Lambda function [Proxy Lambda](../src/03_proxy/proxy_lambda.py) rather than provisioning an Amazon Bedrock Agent. This was a deliberate engineering decision because utilizing Bedrock Agents would introduce serious per-invocation costs directly violating our core low-budget architectural strategy. The current lambda implementation provides an optimal balance between low execution complexity and precise retrieval control, offering far greater flexibility over query construction, dynamic filtering and score thresholding than a managed Amazon Bedrock Knowledge Base configuration.
 
 ## 5.1 Implementation details
 
