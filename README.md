@@ -6,7 +6,7 @@ An AWS-native serverless RAG (Retrieval-Augmented Generation) pipeline that tran
 
 ## What this does
 
-TasteTrend ingests review data from four restaurant locations (each with different schemas, rating scales, and data quality issues), cleans and standardizes it, embeds review text into a vector database, and answers natural-language questions about ratings, sentiment, and customer feedback through a REST API.
+TasteTrend ingests review data from four restaurant locations, cleans and standardizes it, embeds review text into a vector database, and answers natural-language questions about ratings, sentiment, and customer feedback through a REST API.
 
 ## Architecture
 
@@ -21,10 +21,10 @@ Full architecture diagram and component breakdown: [`docs/Technical_documentatio
 ├── iam.tf              # IAM roles & permissions
 ├── lambda.tf           # Lambda function definitions & Cloudwatch configurations
 ├── main.tf             # Core configuration (Providers, S3, OpenSearch, Encryption, Environment Qutputs)
-├── config/             # Schema mapping and rating divisor config (mapping_config.csv)
+├── config/             # Schema mapping and rating divisor config in CSV format
 ├── data/               # Raw source datasets
 ├── docs/               # Full project documentation (Technical Documentation, RAG Pipeline Validation, MVP Plan, User Guide)
-├── src/                # Lambda source codes (ETL, embedding, proxy)
+├── src/                # Lambda source codes (etl, embedding, proxy)
 ├── tests/              # Validation scripts, test queries and validation results
 └── builds/             # Packaged Lambda deployment artifacts
 ```
