@@ -12,7 +12,7 @@ TasteTrend ingests review data from four restaurant locations (each with differe
 
 `S3 → ETL Lambda → Embedding Lambda → OpenSearch → Proxy Lambda (RAG orchestration) → API Gateway`
 
-Full architecture diagram and component breakdown: [`docs/Technical_documentation.md`](../docs/Technical_documentation.md#architecture-overview)
+Full architecture diagram and component breakdown: [`docs/Technical_documentation.md`](docs/Technical_documentation.md#architecture-overview)
 
 ## Repo structure
 
@@ -34,7 +34,7 @@ Full architecture diagram and component breakdown: [`docs/Technical_documentatio
 1. Provision infrastructure with Terraform (`main.tf`, `iam.tf`, `lambda.tf`, `api_gateway.tf`)
 2. Run the ETL Lambda to ingest and clean the raw datasets
 3. Run the Embedding Lambda to generates vector representations using LLM embeddings, then indexes the resulting metadata into an OpenSearch cluster
-4. Run the validation script to simulate API queries — see [`docs/User_guide.md`](../docs/User_guide.md) for full setup and usage instructions
+4. Run the validation script to simulate API queries — see [`docs/User_guide.md`](docs/User_guide.md) for full setup and usage instructions
 
 ## Known limitations
 
@@ -43,4 +43,4 @@ This is a cost-optimized PoC, not a production system — quantitative queries (
 ## Estimated cost
 
 ~$31/month (eu-central-1)
-Full breakdown: [`docs/Technical_documentation.md § Price calculation`](../docs/Technical_documentation.md#price-calculation)
+Full breakdown: [`docs/Technical_documentation.md § Price calculation`](docs/Technical_documentation.md#price-calculation)
