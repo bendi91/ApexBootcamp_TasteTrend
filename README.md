@@ -2,7 +2,7 @@
 
 > **Note:** This is a mock Proof of Concept built as part of the Apex Lab MLOps Bootcamp program. The Statement of Work, client (TasteTrend LLC), and underlying review data are simulated for educational purposes.
 
-An AWS-native serverless RAG (Retrieval-Augmented Generation) pipeline that transforms inconsistent, multi-source restaurant review data into a queryable natural-language knowledge base — demonstrating end-to-end ETL, vector embedding, and semantic search on AWS.
+An AWS-native serverless RAG (Retrieval-Augmented Generation) pipeline that transforms inconsistent restaurant review data into a queryable natural-language knowledge base — demonstrating end-to-end ETL, vector embedding, and semantic search on AWS.
 
 ## What this does
 
