@@ -12,7 +12,7 @@ TasteTrend ingests review data from four restaurant locations, cleans and standa
 
 `S3 → ETL Lambda → Embedding Lambda → OpenSearch → Proxy Lambda (RAG orchestration) → API Gateway`
 
-Full architecture diagram and component breakdown: [`docs/Technical_documentation.md`](docs/Technical_documentation.md#architecture-overview)
+Full architecture diagram and component breakdown: [Architecture overview](docs/architecture-overview.png)
 
 ## Repo structure
 
