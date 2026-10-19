@@ -30,49 +30,53 @@ Additionally, the validator checks for active policy interceptions. Upon detecti
 
 ## Query 1 - RATINGS
 
-**Query**: “typical ratings at eastside res?”
+**Query**: “why do guests leave low star ratings at eastside?”
 **Status**: 200 OK
-**Latency**: 1.66s
+**Latency**: 1.23s
 **Result**: PASSED
-**Matched Keywords**: ['rating', 'star', 'eastside', 'review']
+**Matched Keywords**: ['eastside', 'food', 'service', 'star']
 
 ### Generated Model Answer
 
-Guests typically give eastside restaurant ratings around 3 to 4 stars, appreciating the atmosphere and service but noting mixed reviews about the food quality.
+Guests leave low star ratings at eastside primarily due to poor food quality and notably slow service. Many reviews highlight subpar dishes and disappointing experiences with the staff.
 
 ### Retrieved Context
-
-**`eastside`** — Review ID: `dDKRtNXR8JJAz4x_ZCGo3g` — ✅ **Relevant**
-> Great location, cool atmosphere! The food was a fairly priced for the quality, which was good. I had the pulled pork tacos and they were not skimpy, fully stuffed and filling for $6. Great draft beer selection but it was a buck or two overpriced compared to other craft beer places. The two waitresses were very nice and pleasant. It was slow when we got there and them boom it was packed, they didn't forget about us but we did have to track her down for our last beer. I will be back for sure!
-
-**`eastside`** — Review ID: `ADodUkepU3OyY-G5zZk7yA` — ✅ **Relevant**
-> This place is fun! I like the staff and the vibe. Food is okay. Beer selection is okay. Great happy hour on wine once a week. 3.5 stars is more appropriate for this place.
 
 **`eastside`** — Review ID: `BCLvpd08Ci4Tcq-fIRhZdA` — ✅ **Relevant**
 > Leaving this 2-star review in response to the food, not the place as a drinking/hangout spot...although the wine was crap, too. 2-Stars awarded for the Nintendo 64 and all of the nostalgia-worthy games, the decent choice of drafts (even if they were out of the draft I ordered), and the great service from the staff. The food, on the other hand, will make you wish you had eaten at home. My wife and I went out as a treat because we didn't feel like cooking, but the majority of our food was sub-par. I got the shrimp po-boy which was not a po-boy by definition (it was just shrimp on a crappy sandwich...no French bread, no Cajun sauce or even enough Cajun seasoning, and the shrimp was obviously frozen-thawed not fresh). One of the shrimps was even gray when I bit into it, and the sandwich itself smelled more like old fish than fresh shrimp. My wife got the Athena chicken sandwich and that was just so-so, with the overwhelming taste of feta disguising the low-quality factory chicken they use for the sandwich. The best part of our collective meals was the mixed greens we ordered as a side, so I wouldn't exactly recommend ordering food here unless you're completely hammered and taste is not a priority.
 
-### Defect & Root Cause Analysis
+**`eastside`** — Review ID: `NYilSGDWsYrFnB2EpDRMFA` — ✅ **Relevant**
+> My wife and I have visited twice, and another time with friends. While we like the food and beer choices, the service is inexcusably very slow. We visited on a Saturday afternoon around 5:00 and the place was only 1/3 full. Took a while for our server to greet us, arrived just when we were about to get up and leave. Ordered a beer for each of us and waited at least 10 minutes before I finally got up to ask the bartender about our drinks (after watching him not making any drinks for several minutes and serving a few others who just arrived at the bar). I could barely get the words out before he says they'll be right up. I sit back down, and he still doesn't pour them. We were about to leave again when another bartender made eye contact and she poured the drinks and brought them to us. While our waitress was friendly, she should have been checking on our drinks. Same slow experience with the other two visits, this time we are certain we will not be back.
 
-**Validation Status:** **Partial Success / Architectural Limitation**
+**`eastside`** — Review ID: `exVAtPSIFht6QUVDftWSzw` — ✅ **Relevant**
+> The Bricks gets a "1" in my book because they have terrible servise. Great food, but terrible service. I went there about 3pm on a Tuesday...which happened to be my birthday to have lunch with my mother. Not only were we not greeted by the 3 staff standing around with NO other customers, but we were also not brought any menus or given direction about seating. We sat down and waited for a server to come by and ask for our drink order and bring menus. No one ever did. We got up and grabbed our own menus close to where the staff were standing. They paid no attention. After 3 or 4 more minutes we stood up to leave and they didn't care. So we walked out and I had my birthday lunch elsewhere. I wrote to them on Facebook about our service and they promptly deleted my comment and ignored my message. I used to go to the Bricks all the time, but we've never been back since and I warn any new friends to not go there as well.
 
-* **Evaluation:** The LLM generated a reasonable rating range (3-4 stars) by reading qualitative hints and explicit star mentions in review texts.  
-* **Probable Root Cause:** Lack of structured numeric aggregation (SQL/Pandas). Unstructured vector retrieval selects text samples rather than computing true mathematical averages across the entire dataset. Asking for "typical ratings" via Vector RAG introduces sampling bias based on Top K semantic similarity instead of calculating a true SQL.
+**`eastside`** — Review ID: `0XuENPl2FwekIfu9M-1jDw` — ✅ **Relevant**
+> Terrible selection of food. No "real sweet tea" first and last time visit" anywhere that doesn't carry real sweet tea automatic gets a 1*
+
+### Validation Audit & Key Observations
+
+**Validation Status:** **Success**
+
+* **Retrieval Quality:** 100% precision. All 4 top-ranked review texts specifically contain complaints and criticisms.
+
+* **LLM Synthesis Performance:** Highly accurate synthesis. The model successfully grounded its response in the provided context.
 
 ### Remediation Roadmap (Pre-Production Phase)
 
-Queries requesting overall ratings or statistical metrics should bypass raw k-NN search and route to a Pandas/SQL analytical layer, injecting true dataset aggregations into the final LLM context payload. 
+No remediation strategy is needed here.
 
 ## Query 2 - SENTIMENT
 
 **Query**: "how customers feel about the happy hour at midtown?"
 **Status**: 200 OK
-**Latency**: 1.41s
+**Latency**: 1.29s
 **Result**: PASSED
-**Matched Keywords**: ['midtown', 'happy hour', 'service']
+**Matched Keywords**: ['midtown']
 
 ### Generated Model Answer
 
-Customers generally rave about the happy hour at midtown, especially praising the 50 cent oysters and the variety of half-off drinks. While some mention service issues, the overall sentiment is very positive, highlighting the great value and quality of the offerings.
+Customers generally rave about the happy hour at midtown, especially praising the affordable oysters and delightful drinks. Many highlight the great value of the 50 cent oysters and the overall enjoyable experience.
 
 ### Retrieved Context
 
@@ -105,78 +109,61 @@ No remediation strategy is needed here.
 
 ## Query 3 - COMPARISONS
 
-**Query**: "which spot is better if i want good vegetarian options, eastside or downtown?"
+**Query**: "how do complaints about wait times compare between uptown and downtown?"
 **Status**: 200 OK
-**Latency**: 2.02s
+**Latency**: 1.36s
 **Result**: PASSED
-**Matched Keywords**: ['vegetarian', 'veggie', 'eastside', 'downtown']
+**Matched Keywords**: ['uptown', 'downtown', 'wait']
 
 ### Generated Model Answer
 
-Based on the reviews, downtown seems to offer better vegetarian options with its veggie burger and other plant-based dishes. Eastside focuses more on meat-centric offerings.
+Guests at the downtown restaurant frequently complained about long wait times, while the uptown restaurant had mixed reviews on wait times, with some patrons experiencing lengthy waits and others noting more manageable ones.
 
 ### Retrieved Context
 
-**`eastside`** — Review ID: `nAdvLArVs5EaKwrOvFXTuQ` — ❎**Irrelevant**
-> I ordered the bird and pig with Asian slaw.. $10.   The sandwich is warm and pressed.  It has pulled chicken inside.  I was worried it would be dry.  IT'S NOT.  Very moist!  Thick cut bacon and thinly sliced green apple.there was also a mayo type sauce. .tasted a bit sweet...Boy was this sandwich great!!  The Asian slaw was delicately dressed with the careful handed use of sesame oil.   Fantastic!   And they have a large assortment of Florida brewed beers.  The Wynwood iPA was so flavorful and foam on top just pillowy.  Atmosphere relaxed.  Staff is friendly and service great.  I was here on a Thursday night about 6pm.  Nice and clean.
+**`downtown`** — Review ID: `sViVm-bQJ2_WOSKPtucQAA` — ⚠️ **Relevant context-wise but ignores positive reviews**
+> Service is terrible. Showed up at 4:00 on a Saturday 2 people and a toddler, gave us snotty comments about not being able to give us a highchair, said the wait is over 45 min. Walked out went to Prime Stache. Great service there food is better The chicken was particularly good.
 
-**`eastside`** — Review ID: `94N0yL4NknDfB4JITXlUWA` — ❎**Irrelevant**
-> Just went there yesterday for brunch...  I've had a ton of grilled cheese sandwiches but this makes my top five. Loved the atmosphere. So happy we gave this restaurant a chance.
+**`downtown`** — Review ID: `Cu4Vdu7L85RAgvOitk1bCA` — ⚠️ **Relevant context-wise but ignores positive reviews**
+> The restaurant opens at 5 p.m. on Sunday. I arrived at 5:08 and was told I was the first name on the list. Great.  Sat at the bar and had a tea with a shot of brandy.  When my friends checked to see how long the wait was, we were told it would be two hours.  Even though we were first on the list.  So I went to pay for my drink and it was $13.  FOR A TEA AND A SHOT.      When the drink is more than the burger and there's a two-hour wait when you're first on the list, there's something wrong.    If you're not an uber foodie, save your money and your time and head over to Royal or Good Dog.
 
-**`downtown`** — Review ID: `KlfoquzypG2Jug3R9v7dCA` — ✅ **Relevant**
-> Disclaimer: this three star review is from a vegetarian's perspective.  I understand that this place is in contention for best (real) burger in the city.   My (carnivorous) friend was looking for someone to join her for lunch at Village Whiskey so I figured I'd give their veggie burger a try.  It was a standard spicy black bean burger...it was good but I won't ever need to go back again.  My friend seemed to enjoy her burger and the duck fat fries.  I didn't try the fries (quack quack) despite how amazing they smelled.   It was a decent lunch but definitely a place for meat-eaters.
+**`uptown`** — Review ID: `i4XsL5ShtxUB_BjGxBExZw` — ⚠️ **Relevant context-wise but ignores positive reviews**
+> We stumbled onto this restaurant after seeing the very long line at Hattie B's. The atmosphere seemed really nice and the wait for a table much more manageable-only 10 minutes. The menu choices were appealing and we put in an order for two burgers, fries, a fish sandwich and trail salad.  Then we waited, and waited and waited some more.  Fifty minutes later our food still did not arrive with no real explanation (or apology) from our server.  The manager was pleasant and after she was alerted our food did arrive. The burgers were tasty as were the Belgian fries. The trail mix salad had too many dried cranberries for my liking making it much too sweet.  I think with a different server the experience may have been more positive, but with so many great restaurants in Nashville I won't be going back to find out.
 
-**`downtown`** — Review ID: `ckpyCNxwfrxYlA0B81S-Zw` — ✅ **Relevant**
-> If you go here, definitely eat at the bar. It's a little like dinner and a show because it's so much fun watching the bartenders pour all sorts of drinks- some classic and some not so much. The bartenders are also super-friendly. My boyfriend and I once spent the entire meal quizzing the bartender on what drinks he was making and well, if he was annoyed, he never showed it.   As fun as it is to sit at the bar, I usually don't get a drink there because of the price. My boyfriend loves to try all sorts of beers, but not being a beer drinker myself, I can only assume that the selection is quality. I will say that they let him do a taste test of any new beer before he orders a whole one.   The food for the most part is a big hit. We always order the pickled beets with toasted bread, olive tapenade, and ricotta with fruity olive oil. The beets are tangy and a little sweet. When you get tired of eating pickles, the ricotta and olive tapenade help neutralize your palette so you can go back in for more. It's true that they usually skimp on the bread, but that's a quick fix- we just ask for more.   Now for the mains. I usually get the veggie burger with avocado not because I don't like a good burger, but because we usually eat there when it's too late for me to go home and go to bed on a full stomach. The veggie burger itself has a great flavor and while I appreciate that it's not loaded with breadcrumb filler, it could use a little more structure. After getting it about 4 times now, I've just about mastered the veggie burger hold so that I squeeze the bun just enough to hold it all in place but don't over-squeeze so that the beany burger spills out onto the plate. It comes with a nice bright slaw that gives it some crunchy texture. My boyfriend either gets the Village burger or the BBQ Sammy . Both are really good and juicy. The fried pickles are theoretically a nice touch with the BBQ Sammy, but they honestly don't add much flavor-wise. The burger is definitely heftier, and pickled beets, burgers, and splitting a round of the duck fat fries with cheese, you just want to roll home. The only big improvement that the restaurant could make is serving slightly sturdier buns. They are a little too soft and pillowy for the juicy ingredients that they usually have inside.   Overall, this is a fun place. Considering it's first-come, first-serve, there's usually a wait which is why I recommend checking it out either for an early dinner or a late weeknight dinner. And remember, sit at the bar! The risotto was particularly good.
+**`uptown`** — Review ID: `Dr6doKlArIS1C84lqwM8wg` — ⚠️ **Relevant context-wise but ignores positive reviews**
+> A group of 13, including myself, showed up for a late dinner on Saturday night and while we did expect a wait, we did not expect a 1.5-2 hr wait, considering there were two empty tables inside waiting to be cleared. It was not crowded I should add. The drinks were also a little overpriced, especially since that was pretty much the only option you had for a 2 hour wait. The staff would not allow one under 21 person in our group to stay and even be served just for dinner, so naturally we were all forced to leave AFTER we had already ordered a drink. Despite the staff being professional, we felt it was rude to force our entire party to leave since we had already committed to waiting the 1.5-2 hrs that was expected. We took our business across the street. While the food may be amazing here, I suggest not coming with a party of 2 or more unless you want to be tired, hangry, and spend at least $20 on drinks alone prior to even reading a dinner menu.
 
 ### Defect & Root Cause Analysis 
 
 **Validation Status:** **Failed**
 
-* **Evaluation Anomaly:** Irrelevant Context Retrieval. The retrieval layer failed to pull eastside's highly rated vegetarian reviews, forcing the LLM to hallucinate that eastside only serves meat.
+* **Evaluation Anomaly:** The retrieval exhibits a skew toward negative review segments because these feedbacks explicitly mention wait times ignoring the positive reviews completely.
 
-* **Probable Root Cause:** Rigid static relative relevance threshold (0.7 relative cutoff). Vector similarity scores for eastside's vegetarian review texts fell just below the top hit, causing premature pruning prior to context assembly.
-
-### Expected target context for retrieval
-
-**`eastside`** — Review ID: `hQz9UnbHvv3ctllRquULuQ`
-> This is where the cool kids hang and there's reasons for it. The beer and the food! Tons of vegetarian and even vegan options. I'm not either but I do love that black bean burger and the salads are to die for. The staff is great and always sweet and accommodating. The place is usually filled with great art and an eccentric lot of people. I gave this place five stars because I would be lying if I said I didn't love this place. It's my vibe. It can be yours also. Yup! Just referred to myself as a cool kid.:D
-
-**`eastside`** — Review ID: `s9dqqPMdKO3QdJ5s7lrt3g`
-> "This place is listed as vegetarian-friendly and it is, provided that you eat eggs, cheese, and whatever else they put on the food without listing it in the menu description. Unfortunately this place was a nightmare for me as a vegan. I ordered the veggie cuban with no swiss or honey mustard since those were the only non-vegan ingredients listed in the description, and if it wasn't for the server mentioning ""oh that's a great choice; the chef puts an egg on it too,"" then I would have gotten a sandwich with egg. After I stressed ""no animal products, no egg, no dairy, no butter,"" the server responded with ""oh well you know the egg isn't actually meat"" as opposed to, you know, respecting my dietary restrictions. I have no intention of returning, due to the lack of clarity on the menu and the server's rudeness when I was expressing my allergies/restrictions. Maybe if the restaurant lists all of the ingredients and trains their staff on how to not be rude to someone who was rightfully annoyed at almost getting an item I couldn't eat, then it might be worth a recommendation. But then again, it's not a vegan-friendly establishment despite it being vegetarian-friendly."
+* **Probable Root Cause:** Because vector similarity search maps user queries against dense review embeddings, descriptive negative text scores high semantic relevance for operational complaints, causing the retrieval step (TOP K) to disproportionately pull polarized low-star reviews.
 
 ### Remediation Roadmap (Pre-Production Phase)
 
-To resolve retrieval failures caused by rigid similarity cutoffs, the pipeline should transition from a fixed threshold to a dynamic top-K candidate pool using hybrid vector-sparse search. A post-retrieval Cross-Encoder will then rerank these candidates before context assembly, ensuring critical domain-specific review texts are retained for the LLM. 
+Introduce dedicated sentiment pre-classification layers to separate operational complaint extraction from general satisfaction summarization
 
 ## Query 4 - TRENDS
 
-**Query**: "how customers feel about the happy hour at midtown?"
+**Query**: "what complaints keep coming up again and again at uptown?"
 **Status**: 200 OK
-**Latency**: 1.56s
+**Latency**: 1.75s
 **Result**: PASSED
-**Matched Keywords**: [busy', 'uptown', 'long', 'wait']
+**Matched Keywords**: ['uptown', 'wait']
 
 ### Generated Model Answer
 
-*Complaints about long wait times at Uptown have been frequent, with several reviews mentioning extended waits of up to 2 hours or more, especially when the restaurant wasn't very busy. Some guests felt the wait was justified, but others found it excessive and disruptive.*
+Guests frequently mention that Uptown is overpriced and underwhelming, with long wait times for food despite an appealing menu. Many feel the prices don't match the quality offered.
 
 ### Retrieved Context
 
-**`uptown`** — Review ID: `Dr6doKlArIS1C84lqwM8wg` — ⚠️ Relevant context-wise but the model can’t perform time-series computation
-> A group of 13, including myself, showed up for a late dinner on Saturday night and while we did expect a wait, we did not expect a 1.5-2 hr wait, considering there were two empty tables inside waiting to be cleared. It was not crowded I should add. The drinks were also a little overpriced, especially since that was pretty much the only option you had for a 2 hour wait. The staff would not allow one under 21 person in our group to stay and even be served just for dinner, so naturally we were all forced to leave AFTER we had already ordered a drink. Despite the staff being professional, we felt it was rude to force our entire party to leave since we had already committed to waiting the 1.5-2 hrs that was expected. We took our business across the street. While the food may be amazing here, I suggest not coming with a party of 2 or more unless you want to be tired, hangry, and spend at least $20 on drinks alone prior to even reading a dinner menu.
+**`uptown`** — Review ID: `xddfrSVXSiSuJd_phMlXSA` — ⚠️ **Relevant context-wise but the model can’t perform time-series computation**
+> Overpriced.    That's the best way to describe it.  Everything was FINE.  Just fine.  But when our bar tab is $60 for a few drinks, and I felt like I needed to go over the menu about 8 times to find something exciting to try (I landed on the burger), I felt let down.    All of the reviews of this place made me want to come visit.  I think these must all be Vandy kids or tourists who don't know where the better quality places are with better prices.    I just felt, well... so meh about the whole thing.    Again, everything was fine, decent, even.  But by the time to pay the bill came, my husband and I thought of at LEAST 5 or 6 different places we could have gone for BETTER drinks with CHEAPER prices and a much better menu.    Obviously, this is probably for the hip crowd.  So, if you're hip, go for it.  If you were once hip, and you know better... be prepared to be underwhelmed.
 
-**`uptown`** — Review ID: `i4XsL5ShtxUB_BjGxBExZw` — ⚠️ Relevant context-wise but the model can’t perform time-series computation
+**`uptown`** — Review ID: `i4XsL5ShtxUB_BjGxBExZw` — ⚠️ **Relevant context-wise but the model can’t perform time-series computation**
 > We stumbled onto this restaurant after seeing the very long line at Hattie B's. The atmosphere seemed really nice and the wait for a table much more manageable-only 10 minutes. The menu choices were appealing and we put in an order for two burgers, fries, a fish sandwich and trail salad.  Then we waited, and waited and waited some more.  Fifty minutes later our food still did not arrive with no real explanation (or apology) from our server.  The manager was pleasant and after she was alerted our food did arrive. The burgers were tasty as were the Belgian fries. The trail mix salad had too many dried cranberries for my liking making it much too sweet.  I think with a different server the experience may have been more positive, but with so many great restaurants in Nashville I won't be going back to find out.
-
-**`uptown`** — Review ID: `vY06Ye_udeTHL6rfnSZfCw` — ⚠️ Relevant context-wise but the model can’t perform time-series computation
-> Terrible wait (unnecessary), average service, above average prices, and excruciating wait for food. Find someplace else. There's lots to choose from.
-
-**`uptown`** — Review ID: `T9notipZzakxsGqZNrR2Fg` — ⚠️ Relevant context-wise but the model can’t perform time-series computation
-> First and foremost, this place is worth the wait. If you are planning to eat here, and didn't come before opening, expect at least a 20-30 minute wait if you're lucky. We got here right when the doors opened and only had to wait 20 minutes to get seated. The food is everything it's hyped up to be, and the service was really great. So, as said earlier, this place is worth the wait.
-
-**`uptown`** — Review ID: `8hBiPbwlO6aKuGhkpj_20g` — ⚠️ Relevant context-wise but the model can’t perform time-series computation
-> Food was fantastic, service was so bad I wouldn't come back. They are severely understaffed, we finished eating 45 mins before we got the check. The hour and a half wait is completely unnecessary!
 
 ### Defect & Root Cause Analysis 
 
@@ -184,7 +171,7 @@ To resolve retrieval failures caused by rigid similarity cutoffs, the pipeline s
 
 * **Evaluation Anomaly:** Temporal Synthesis Failure. While the model retrieved relevant review texts context-wise, it failed to answer the core temporal question.
 
-* **Probable Root Cause:** the current vector search retrieves documents based on semantic similarity, not chronological distribution. LLMs lack native capabilities for aggregated time-series computation even though review_date is available in the embeddings.
+* **Probable Root Cause:** The current vector search retrieves documents based on semantic similarity, not chronological distribution. LLMs lack native capabilities for aggregated time-series computation even though review_date is available in the embeddings.
 
 ### Remediation Roadmap (Pre-Production Phase)
 
@@ -192,15 +179,15 @@ To remediate identified evaluation failures, pre-production pipeline updates sho
 
 ## Query 5 - SPECIFIC TRENDS
 
-**Query**: “the burgers are juicy at downtown?"
+**Query**: “do guests say anything negative about the burgers at downtown?"
 **Status**: 200 OK
-**Latency**: 1.27s
+**Latency**: 1.36s
 **Result**: PASSED
-**Matched Keywords**: ['burger', 'downtown']
+**Matched Keywords**: ['burger']
 
 ### Generated Model Answer
 
-*Guests consistently praise the burgers at downtown for their juiciness and flavor. Many reviewers highlight the Village Burger as particularly delicious and satisfying.*
+Guests have mixed feelings about the burgers; some rave about them as the best they've ever had, while others find them good but not exceptional. The veggie burger could use more structure according to one review.
 
 ### Retrieved Context
 
@@ -210,14 +197,14 @@ To remediate identified evaluation failures, pre-production pipeline updates sho
 **`downtown`** — Review ID: `ckpyCNxwfrxYlA0B81S-Zw` — ✅ **Relevant**
 > If you go here, definitely eat at the bar. It's a little like dinner and a show because it's so much fun watching the bartenders pour all sorts of drinks- some classic and some not so much. The bartenders are also super-friendly. My boyfriend and I once spent the entire meal quizzing the bartender on what drinks he was making and well, if he was annoyed, he never showed it.   As fun as it is to sit at the bar, I usually don't get a drink there because of the price. My boyfriend loves to try all sorts of beers, but not being a beer drinker myself, I can only assume that the selection is quality. I will say that they let him do a taste test of any new beer before he orders a whole one.   The food for the most part is a big hit. We always order the pickled beets with toasted bread, olive tapenade, and ricotta with fruity olive oil. The beets are tangy and a little sweet. When you get tired of eating pickles, the ricotta and olive tapenade help neutralize your palette so you can go back in for more. It's true that they usually skimp on the bread, but that's a quick fix- we just ask for more.   Now for the mains. I usually get the veggie burger with avocado not because I don't like a good burger, but because we usually eat there when it's too late for me to go home and go to bed on a full stomach. The veggie burger itself has a great flavor and while I appreciate that it's not loaded with breadcrumb filler, it could use a little more structure. After getting it about 4 times now, I've just about mastered the veggie burger hold so that I squeeze the bun just enough to hold it all in place but don't over-squeeze so that the beany burger spills out onto the plate. It comes with a nice bright slaw that gives it some crunchy texture. My boyfriend either gets the Village burger or the BBQ Sammy . Both are really good and juicy. The fried pickles are theoretically a nice touch with the BBQ Sammy, but they honestly don't add much flavor-wise. The burger is definitely heftier, and pickled beets, burgers, and splitting a round of the duck fat fries with cheese, you just want to roll home. The only big improvement that the restaurant could make is serving slightly sturdier buns. They are a little too soft and pillowy for the juicy ingredients that they usually have inside.   Overall, this is a fun place. Considering it's first-come, first-serve, there's usually a wait which is why I recommend checking it out either for an early dinner or a late weeknight dinner. And remember, sit at the bar! The risotto was particularly good.
 
-**`downtown`** — Review ID: `lKeXqrHUguxMSR7HWXcbrA` — ✅ **Relevant**
-> Best burger in the city, hands down. The first time I had the Village Burger is was amazing and it hasn't disappointed since. What kills me is that on any given night, the wait to enjoy this tiny piece of meat heaven is unbearable. The solution? Go at lunch or really early in the afternoon if you can.   I honestly couldn't tell you how the other entrees are, because this is the only thing I get, along with the duck fat french fries of course. The appetizers are good, but nothing memorable. My 4 star rating really just stems from the burger and their cocktails. I've tried a few of them and all were really good.    Definitely try the pickle options too. My favorite was the pickled artichokes, but on last look at the menu, it looks like it was taken off.   Man, I think I need a burger right now... The fish was particularly good.
+**`downtown`** — Review ID: `Kg7o1SX-pu-0Gacl3FvO6Q` — ✅ **Relevant**
+> My friend from out of town is a burger connoisseur so I thought this place would be the perfect place to take him for a casual lunch. The burger of the month at the time included pork belly, an edamame spread, and some sweet and tangy asian sauce that was amazing! I'd heard a lot about the duck fat fries so we ordered them, but to be honest I was a little disappointed at how bland they were. It was a bit emptier at that time of day so the service was fine, but I wouldn't necessarily come back.  I've also been here for the bar at night, which I prefer. Limited seating but really delicious drinks!
 
 **`downtown`** — Review ID: `wasbvIcwXQjiQ80DOpWu3A` — ✅ **Relevant**
 > I don't like to get caught up in the hype of celebrity chefs.  Graces is not my favorite chef in the city, but these burgers are amazing. By far the best burger I have ever had.  They are so good I almost don't consider them burgers.  They are a special gift sent to us from the heavens.  I really wanted to like the fries, but they weren't very good.  The desserts sound amazing, but are fairly average (if you want something sweet go across the street to Capogiro or a couple blocks away to Yogorino).  Did I mention how much I love these burgers? The appetizer was particularly good.
 
-**`downtown`** — Review ID: `-X-RUh8n-GO7llo3wPyb7Q` — ✅ **Relevant**
-> Nestled on the corner of 20th and Chestnut, it looks bigger than what you'll discover inside. A tight-knit community of tables, all filled, whether reservations can be made or not, saddled around a long bar, and some standing room to place your beer and food, if standing is fine.   Wander in at 6:00 on a Saturday, and are told its a 2 hour wait for a table. Bar is a much better option. Was able to grab a seat at the bar as soon as we got in.   Bartenders are friendly. The wall of whiskey (or whisky) behind the bar is quite impressive.   Food is quite delicious. Village burger with sauteed onions and blue cheese is quite the tasty treat. Burger is cooked a shade under what you request, which for medium, a bit redder is fine by me. The wife got a pulled pork sandwich, and salivated over every bite. A side order of duck fat fries in a cheese sauce compliments the meal well.   Pricing is surprisingly reasonable. Definitely on the list as a repeat place to go.
+**`downtown`** — Review ID: `Xu2WtxUIDQXb-rwkXWGAng` — ✅ **Relevant**
+> I first heard of this place from a dude I know, and then I heard Craig LaBan called it the best burger in the city. That must be the $26 burger that I didn't have (mainly because I'm not a fan of bleu cheese, and I didn't want to be "that guy" to ask for a different cheese) because the Village Burger was good, but not exceptional.  I got the "Village Burger" (8oz, Sesame Roll, Tomato, Boston Bibb, House Made Thousand Island) with bacon and provolone (+$3). It was huge, could hardly fit in my mouth huge, and delicious, but I don't think I can call it the best burger in all of Philadelphia.  The duck fat fries were great. They were big, crispy, and hot on the inside. I'm going to get the sly fox cheddar sauce with them next time.  The whiskey list is HUGE.   It's so small inside they don't have "sections" for the waitresses (or it might have been because only the bar and outside seating were busy). There's the bar that seats maybe eight people, though I didn't count (it was full), four or five booths (completely empty at 5:30pm), and a little counter that seats five or six in the back (empty as well). There's more seating outside than inside. After paying one waitress, another asked if I wanted another beer. I'm not sure if it's a plus that there's always someone checking on you, or a negative because they're unorganized?    I'll come back, but my main goal will be to try the extensive whiskey list, not a burger. The risotto was particularly good.
 
 ### Validation Audit & Key Observations
 
@@ -233,11 +220,11 @@ No remediation strategy is needed here.
 
 ## Query 6 - RATINGS - Testing guardrails in action
 
-**Query**: "show the average rating for eastside res?"
+**Query**: "how much percentage of guests complained about wait times at uptown?"
 **Status**: 200 OK
-**Latency**: 1.20s
-**Result**: FAILED
-**Matched Keywords**: ['GUARDRAIL_INTERCEPTED']
+**Latency**: 1.3s
+**Result**: PASSED
+**Matched Keywords**: ['uptown', 'wait', 'GUARDRAIL_INTERCEPTED']
 
 ### Generated Model Answer
 
@@ -245,11 +232,23 @@ No remediation strategy is needed here.
 
 ### Retrieved Context
 
-**`eastside`** — Review ID: `ADodUkepU3OyY-G5zZk7yA` — ✅ **Relevant**
-> This place is fun! I like the staff and the vibe. Food is okay. Beer selection is okay. Great happy hour on wine once a week. 3.5 stars is more appropriate for this place.
+**`eastside`** — Review ID: `Dr6doKlArIS1C84lqwM8wg` — ✅ **Relevant**
+> A group of 13, including myself, showed up for a late dinner on Saturday night and while we did expect a wait, we did not expect a 1.5-2 hr wait, considering there were two empty tables inside waiting to be cleared. It was not crowded I should add. The drinks were also a little overpriced, especially since that was pretty much the only option you had for a 2 hour wait. The staff would not allow one under 21 person in our group to stay and even be served just for dinner, so naturally we were all forced to leave AFTER we had already ordered a drink. Despite the staff being professional, we felt it was rude to force our entire party to leave since we had already committed to waiting the 1.5-2 hrs that was expected. We took our business across the street. While the food may be amazing here, I suggest not coming with a party of 2 or more unless you want to be tired, hangry, and spend at least $20 on drinks alone prior to even reading a dinner menu.
 
-**`eastside`** — Review ID: `N1BiMP9r3IsmEzChi9PPwA` — ⚠️ **Partially relevant** (Qualitative feedback, no rating)
-> I read the reviews on Yelp and decided to check out Bricks of Ybor for myself.   Nice atmosphere and hip music playing in the background. I sat at the bar and watched the flat screen televisions (they were playing the History Channel on one TV. & "Shaun of the Dead" on another TV.).   Good beer on tap (I tried the IPA -- it was good) and a small menu specializing in appetizers, salads & sandwiches. I ordered the hummus plate and the iceberg wedge salad -- both were delicious. The blue cheese dressing on the salad was particularly scrumptious.   For one beer and an app and a salad, my bill came to just under $25 before tip -- kinda expensive (considering they no longer serve the "salmon spread" on the hummus plate -- should that really be priced at $10, still?).
+
+**`eastside`** — Review ID: `o_jKYWFuFfuVAs2R3-vPiw` — ✅ **Relevant**
+> SUPER DISAPPOINTED...recommended by a friend, came here to have a drink and an appetizer with my boyfriend, sat down at 5 o'clock at the bar and waited 25 minutes before we decided to get up and walk out. The bar was hardly full, 2 seats available as soon as we walked in and the restaurant itself was relatively empty. The bartender walked down and helped another couple but never acknowledged us. Hope others have a better experience because it is a good looking restaurant.
+
+
+**`eastside`** — Review ID: `ea73hriHkIawR9OLYQB-Zg` — ✅ **Relevant**
+> Good: The food was fantastic. We had a large group (10+) and came here for brunch (and drinks, natch). I had the eggs benedict with short ribs, and loved it. From what I can tell, the rest of the group all enjoyed their dishes as well, from the fried rice breakfast dish to the nachos to the AMAZING peanut butter pancakes. As a starter/side, do not under any circumstances pass up on the "white trash hash" - hasbrowns with white cheddar cheese. YUM.  Bad: The wait was ludicrous. Yes, it was a Saturday, and yes, we had a large group, but Christ Almighty. We waited at the bar (standing room only) for over two hours before being seated. Even if we had split into smaller groups, without a reservation, the wait time would've still been close to an hour and a half. Yikes.
+
+
+**`eastside`** — Review ID: `anUxMEWoKOnikXFx7ZkWRw` — ✅ **Relevant**
+> So my girlfriend and I wanted to have a low key night. We went in around 8pmon a Friday night and the wait to get a table was about an hour.   We decided to go to the bar and have a drink while we waited.  A spot at the bar came open, so we took that instead.  Good thing, because almost 2 hours in,  they still wouldn't have called our name?  At first I loved the crowd.  It was a tad older.  It was a nice "after work" 30 something crowd. NONE of the local "socialites" were there.  However as midnight approached, that changed. It turned into the Virago/Whiskey Kitchen crowd.  Which I know many people don't go to WK for that very reason.    Onto food and drink.  I had the Nacho's and my friend had the fried fish.  Neither one of us were the least bit impressed with the food. She said her's was very bland and mine was not impressive at all. However she did give props to the spicy ketchup that comes with the fries!     As for our drinks.  Fancy names and high prices sum it up. I was brave and tried the "preserves" drink.  I went with Gin and the pinapple and honey preserves .. i think that is what it was.   It was very strong.  The bartender told me that it would start to taste different with time. Um, no.   It tasted like gin with a little jelly.  I don't care how "new york" and trendy it is suppose to be (that is how it was described to me) it was gross.   It was nice. A bigger Whiskey Kitchen is the best way to describe it.  I'm sure I'll go back, but I will stick with drinks I know and try to leave before the pretentious crowd arrives.   One other note.  The manager kept coming over to us numerous times to make sure we were happy.  I though that was nice!
+
+**`eastside`** — Review ID: `i4XsL5ShtxUB_BjGxBExZw` — ✅ **Relevant**
+> We stumbled onto this restaurant after seeing the very long line at Hattie B's. The atmosphere seemed really nice and the wait for a table much more manageable-only 10 minutes. The menu choices were appealing and we put in an order for two burgers, fries, a fish sandwich and trail salad.  Then we waited, and waited and waited some more.  Fifty minutes later our food still did not arrive with no real explanation (or apology) from our server.  The manager was pleasant and after she was alerted our food did arrive. The burgers were tasty as were the Belgian fries. The trail mix salad had too many dried cranberries for my liking making it much too sweet.  I think with a different server the experience may have been more positive, but with so many great restaurants in Nashville I won't be going back to find out.
 
 ### Validation Audit & Key Observations
 
